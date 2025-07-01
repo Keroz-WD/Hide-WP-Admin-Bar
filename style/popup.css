@@ -35,7 +35,7 @@ body {
   height: 20px;
 }
 
-.toggleBar {
+#toggleBar {
   user-select: none;
   cursor: pointer;
   display: flex;
@@ -43,7 +43,7 @@ body {
   column-gap: 0.5rem;
 }
 
-.toggleBar:hover {
+#toggleBar:hover {
   color: var(--wp-blue);
 }
 

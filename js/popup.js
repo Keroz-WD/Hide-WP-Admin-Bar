@@ -16,17 +16,23 @@ const sendToContent = (request) => {
 };
 
 const manageResponse = (response) => {
-  console.log("Response : " + response);
-  if (response.adminBarCheck) {
-    btnToggleAdminBar.disabled = false;
-  }
-  if (response.adminBarHidden) {
-    console.log("show");
-    btnToggleAdminBar.textContent = "Show admin bar";
-  } else {
-    console.log("hide");
-    btnToggleAdminBar.textContent = "Hide admin bar";
-  }
+  console.log("Response : ", response);
+
+  const actions = {
+    adminBarCheck: () => {
+      btnToggleAdminBar.disabled = false;
+    },
+    adminBarHidden: () => {
+      console.log("Admin bar hidden");
+    },
+    adminBarShown: () => {
+      console.log("Admin bar shown");
+    },
+  };
+
+  Object.keys(response).forEach((key) => {
+    if (actions[key]) actions[key]();
+  });
 };
 
 // const sendToContent = (request) => {
