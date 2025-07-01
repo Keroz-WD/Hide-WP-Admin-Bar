@@ -1,0 +1,89 @@
+:root {
+  --wp-black: #1D2327;
+  --wp-blue: #72AEE6;
+  --wp-grey: #A7AAAD;
+  --wp-white: #f0f0f1;
+}
+
+
+* {
+  margin: 0;
+  box-sizing: content-box;
+}
+
+body {
+  width: 300px;
+  background: var(--wp-black);
+  padding: 16px;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--wp-white);
+}
+
+.row {
+  display: flex;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggleBar {
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+.toggleBar:hover {
+  color: var(--wp-blue);
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 1;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0px;
+  background: var(--wp-grey);
+  transition: .4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  border-radius: 16px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: var(--wp-blue);
+}
+
+input:checked+.slider:before {
+  transform: translateX(20px);
+}
