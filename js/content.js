@@ -4,10 +4,12 @@ const adminBar = document.getElementById("wpadminbar");
 
 // Listen for messages from popup.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("request");
   switch (message.request) {
     case "checkAdminBar":
       sendResponse({ adminBarCheck: checkAdminBar() });
+      break;
+    case "isAdminBarVisible":
+      sendResponse({ adminBarVisible: isAdminBarVisible() });
       break;
     case "toggleAdminBar":
       sendResponse({ adminBarHidden: toggleAdminBar() });
@@ -16,23 +18,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Check if page has an admin bar
-const checkAdminBar = () => {
-  return adminBar ? true : false;
-};
+const checkAdminBar = () => (adminBar ? true : false);
 
 const toggleAdminBar = () => {
-  const html = document.documentElement;
-  const computedDisplay = window.getComputedStyle(adminBar).display;
-  if (computedDisplay === "block") {
-    // when the bar is displayed
+  if (isAdminBarVisible()) {
     adminBar.style.display = "none";
-    html.style.setProperty("margin-top", "0", "important");
+    document.documentElement.style.setProperty("margin-top", "0", "important");
     return true;
   } else {
     adminBar.style.display = "block";
-    html.style.marginTop = "32px";
+    document.documentElement.style.marginTop = "32px";
     return false;
   }
+};
+
+const isAdminBarVisible = () => {
+  console.log("visible = " + (adminBar.style.display != "none"));
+  return adminBar.style.display != "none";
 };
 
 const getAdminElements = () => {};

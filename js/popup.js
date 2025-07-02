@@ -22,11 +22,15 @@ const manageResponse = (response) => {
     adminBarCheck: (value) => {
       if (value) {
         btnToggleAdminBar.disabled = false;
+        sendToContent({ request: "isAdminBarVisible" });
       } else {
         document.getElementById("toggleBar").classList.add("disabled");
         document.getElementById("toggleLabel").textContent =
           "No Admin Bar found";
       }
+    },
+    adminBarVisible: (value) => {
+      btnToggleAdminBar.checked = !value;
     },
     adminBarHidden: (value) => {
       if (value) {
