@@ -19,19 +19,26 @@ const manageResponse = (response) => {
   console.log("Response : ", response);
 
   const actions = {
-    adminBarCheck: () => {
-      btnToggleAdminBar.disabled = false;
+    adminBarCheck: (value) => {
+      if (value) {
+        btnToggleAdminBar.disabled = false;
+      } else {
+        document.getElementById("toggleBar").classList.add("disabled");
+        document.getElementById("toggleLabel").textContent =
+          "No Admin Bar found";
+      }
     },
-    adminBarHidden: () => {
-      console.log("Admin bar hidden");
-    },
-    adminBarShown: () => {
-      console.log("Admin bar shown");
+    adminBarHidden: (value) => {
+      if (value) {
+        console.log("Admin bar hidden");
+      } else {
+        console.log("Admin bar shown");
+      }
     },
   };
 
-  Object.keys(response).forEach((key) => {
-    if (actions[key]) actions[key]();
+  Object.entries(response).forEach(([key, value]) => {
+    if (actions[key]) actions[key](value);
   });
 };
 
@@ -66,5 +73,4 @@ document.addEventListener("DOMContentLoaded", () => {
   sendToContent({ request: "checkAdminBar" });
 
   btnToggleAdminBar.addEventListener("click", toggleAdminBar);
-  console.log("Popup initialized");
 });

@@ -2,7 +2,7 @@
   --wp-black: #1D2327;
   --wp-blue: #72AEE6;
   --wp-grey: #A7AAAD;
-  --wp-white: #f0f0f1;
+  --wp-white: #F0F0F1;
 }
 
 
@@ -14,12 +14,12 @@
 body {
   width: 300px;
   background: var(--wp-black);
-  padding: 16px;
+  padding: 0.75rem;
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 16px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1rem;
   color: var(--wp-white);
 }
 
@@ -37,14 +37,14 @@ body {
 
 #toggleBar {
   user-select: none;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  column-gap: 0.5rem;
+  column-gap: 0.75rem;
 }
 
-#toggleBar:hover {
+#toggleBar:hover:not(.disabled) {
   color: var(--wp-blue);
+  cursor: pointer;
 }
 
 /* Hide default HTML checkbox */
@@ -76,8 +76,16 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  background-color: white;
+  background-color: var(--wp-white);
   transition: .4s;
+}
+
+.disabled {
+  color: var(--wp-white);
+}
+
+.disabled .switch {
+  display: none;
 }
 
 input:checked+.slider {
