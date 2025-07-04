@@ -81,7 +81,7 @@ body {
 }
 
 .disabled {
-  color: var(--wp-white);
+  color: var(--wp-grey);
 }
 
 .disabled .switch {
