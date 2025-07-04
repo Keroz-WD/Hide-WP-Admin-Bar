@@ -14,9 +14,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "toggleAdminBar":
       sendResponse({ adminBarHidden: toggleAdminBar() });
       break;
-    case "getUser":
-      sendResponse({ adminBarUser: getUser() });
-      break;
   }
 });
 
@@ -27,6 +24,7 @@ const toggleAdminBar = () => {
   if (isAdminBarVisible()) {
     adminBar.style.display = "none";
     document.documentElement.style.setProperty("margin-top", "0", "important");
+
     return true;
   } else {
     adminBar.style.display = "block";
@@ -37,19 +35,4 @@ const toggleAdminBar = () => {
 
 const isAdminBarVisible = () => {
   return adminBar.style.display != "none";
-};
-
-const getUser = () => {
-  const account = document.getElementById("wp-admin-bar-my-account");
-  if (account) {
-    const displayName = account.querySelector(".display-name");
-    if (displayName && displayName.textContent) {
-      return displayName.textContent.trim();
-    }
-    const link = account.querySelector("a");
-    if (link && link.textContent) {
-      return link.textContent.trim();
-    }
-  }
-  return "";
 };

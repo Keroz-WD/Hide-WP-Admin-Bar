@@ -1,7 +1,6 @@
 "use strict";
 
 const btnToggleAdminBar = document.getElementById("btnToggleAdminBar");
-let userName = "";
 
 // Send requests to content.js and receive responses
 const sendToContent = (request) => {
@@ -17,23 +16,26 @@ const sendToContent = (request) => {
 };
 
 const manageResponse = (response) => {
-  console.log("Response : ", response);
+  //console.log("Response : ", response);
+  if (!response || typeof response !== "object") {
+    console.warn("No valid response received from content script.");
+    noBarFound();
+    return;
+  }
 
   const actions = {
     adminBarCheck: (value) => {
+      if (typeof value === "undefined") {
+        console.warn("adminBarCheck: value is undefined");
+        noBarFound();
+        return;
+      }
       if (value) {
         btnToggleAdminBar.disabled = false;
         sendToContent({ request: "isAdminBarVisible" });
-        sendToContent({ request: "getUser" });
       } else {
-        document.getElementById("toggleBar").classList.add("disabled");
-        document.getElementById("toggleLabel").textContent =
-          "No Admin Bar found";
+        noBarFound();
       }
-    },
-    adminBarUser: (value) => {
-      userName = value;
-      document.getElementById("user").textContent = "Logged as " + value;
     },
     adminBarVisible: (value) => {
       btnToggleAdminBar.checked = !value;
@@ -57,38 +59,13 @@ const toggleAdminBar = () => {
   sendToContent({ request: "toggleAdminBar" });
 };
 
+const noBarFound = () => {
+  document.getElementById("toggleBar").classList.add("disabled");
+  document.getElementById("toggleLabel").textContent = "No Admin Bar found";
+};
+
 // Initialize the popup
 document.addEventListener("DOMContentLoaded", () => {
   sendToContent({ request: "checkAdminBar" });
-  getDomain((domain) => {
-    console.log("Domain: ", domain);
-  });
   btnToggleAdminBar.addEventListener("click", toggleAdminBar);
 });
-
-// Returns the full home URL (protocol + host + first path segment, with trailing slash) of the active tab
-const getDomain = (callback) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length > 0) {
-      try {
-        const url = new URL(tabs[0].url);
-        // Get protocol + host + first path segment (if any)
-        let homeUrl = url.origin;
-        const pathMatch = url.pathname.match(/^\/(.+?\/)/);
-        if (pathMatch) {
-          homeUrl += "/" + pathMatch[1];
-        } else {
-          homeUrl += "/";
-        }
-        // Remove double slashes if any
-        homeUrl = homeUrl.replace(/([^:]\/)\/+/, "$1");
-        callback(homeUrl);
-      } catch (e) {
-        console.warn("Invalid URL");
-        callback("");
-      }
-    } else {
-      callback("");
-    }
-  });
-};
