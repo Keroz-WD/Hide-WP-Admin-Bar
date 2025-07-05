@@ -3,55 +3,36 @@
 const btnToggleAdminBar = document.getElementById("btnToggleAdminBar");
 
 // Send requests to content.js and receive responses
+
 const sendToContent = (request) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length > 0) {
-      chrome.tabs.sendMessage(tabs[0].id, request, (response) => {
-        manageResponse(response);
-      });
-    } else {
-      console.warn("No active tab found.");
-    }
+    if (!tabs.length) return console.warn("No active tab found.");
+    chrome.tabs.sendMessage(tabs[0].id, request, manageResponse);
   });
 };
 
 const manageResponse = (response) => {
-  //console.log("Response : ", response);
   if (!response || typeof response !== "object") {
     console.warn("No valid response received from content script.");
-    noBarFound();
-    return;
+    return noBarFound();
   }
-
   const actions = {
     adminBarCheck: (value) => {
-      if (typeof value === "undefined") {
-        console.warn("adminBarCheck: value is undefined");
-        noBarFound();
-        return;
-      }
-      if (value) {
-        btnToggleAdminBar.disabled = false;
-        sendToContent({ request: "isAdminBarVisible" });
-      } else {
-        noBarFound();
-      }
+      if (value === undefined) return noBarFound();
+      btnToggleAdminBar.disabled = !value;
+      if (value) sendToContent({ request: "isAdminBarVisible" });
+      else noBarFound();
     },
     adminBarVisible: (value) => {
       btnToggleAdminBar.checked = !value;
     },
     adminBarHidden: (value) => {
-      if (value) {
-        console.log("Admin bar hidden");
-      } else {
-        console.log("Admin bar shown");
-      }
+      console.log(value ? "Admin bar hidden" : "Admin bar shown");
     },
   };
-
-  Object.entries(response).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(response)) {
     if (actions[key]) actions[key](value);
-  });
+  }
 };
 
 // Toggle Admin Bar display
@@ -60,8 +41,9 @@ const toggleAdminBar = () => {
 };
 
 const noBarFound = () => {
-  document.getElementById("toggleBar").classList.add("disabled");
-  document.getElementById("toggleLabel").textContent = "No Admin Bar found";
+  document.getElementById("toggleBar")?.classList.add("disabled");
+  const label = document.getElementById("toggleLabel");
+  if (label) label.textContent = "No Admin Bar found";
 };
 
 // Initialize the popup
