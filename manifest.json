@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Hide WP Admin Bar",
-  "version": "0.1.0",
-  "description": "Hide WordPress admin bar.",
+  "name": "Hide WordPress Admin Bar",
+  "version": "1.0.0",
+  "description": "Toggle the WP admin toolbar for cleaner previews and front-end work",
   "author": "kerozextensions@gmail.com",
   "permissions" : ["activeTab"],
   "action": {
